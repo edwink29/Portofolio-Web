@@ -19,6 +19,9 @@ const Footer = () => {
             <a href="https://www.instagram.com/edwk29/">
                 <i className="ri-instagram-fill ri-2x"></i>
             </a>
+            <a href="mailto:edwn.k29@gmail.com">
+                <i class="ri-mail-ai-fill ri-2x"></i>
+            </a>
         </div>
       </div>
     </>
