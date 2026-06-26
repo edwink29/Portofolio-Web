@@ -1,366 +1,605 @@
-import DataImage, { listAchievement } from "./data";
-import { listTools, listEducate, listProyek, listExperience } from "./data";
+import { motion } from "framer-motion";
+import {
+  ArrowUpRight,
+  Award,
+  BriefcaseBusiness,
+  CalendarDays,
+  Code2,
+  Database,
+  ExternalLink,
+  Github,
+  GraduationCap,
+  Layers3,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Rocket,
+  Server,
+  Smartphone,
+  Sparkles,
+  TerminalSquare,
+} from "lucide-react";
+import DataImage, {
+  listAchievement,
+  listEducate,
+  listExperience,
+  listProyek,
+  listTools,
+} from "./data";
+
+const Motion = motion;
+const githubUrl =
+  "https://github.com/edwink29?tab=overview&from=2025-09-01&to=2025-09-30";
+const linkedinUrl = "https://www.linkedin.com/in/edwin-kurniawan-617bb534a/";
+const instagramUrl = "https://www.instagram.com/edwk29/";
+const email = "edwn.k29@gmail.com";
+const whatsappUrl =
+  "https://api.whatsapp.com/send?text=Halo%20Edwin%2C%20saya%20tertarik%20untuk%20berdiskusi%20tentang%20project.";
+
+const reveal = {
+  hidden: { opacity: 0, y: 28, filter: "blur(12px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const stagger = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const SectionHeader = ({ eyebrow, title, description, align = "center" }) => (
+  <Motion.div
+    className={`section-heading ${align === "left" ? "items-start text-left" : "items-center text-center"}`}
+    variants={reveal}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-80px" }}
+  >
+    <span className="eyebrow">
+      <Sparkles size={14} />
+      {eyebrow}
+    </span>
+    <h2>{title}</h2>
+    <p>{description}</p>
+  </Motion.div>
+);
+
+const MagneticButton = ({
+  href,
+  children,
+  variant = "primary",
+  className = "",
+  ...props
+}) => (
+  <Motion.a
+    href={href}
+    className={`btn btn-${variant} ${className}`}
+    whileHover={{ y: -3, scale: 1.02 }}
+    whileTap={{ scale: 0.97 }}
+    {...props}
+  >
+    {children}
+  </Motion.a>
+);
+
+const techGroups = [
+  {
+    title: "Frontend",
+    icon: Layers3,
+    items: [
+      "HTML",
+      "CSS",
+      "Javascript",
+      "React JS",
+      "Tailwind CSS",
+      "Bootstrap",
+    ],
+  },
+  { title: "Backend", icon: Server, items: ["Laravel"] },
+  { title: "Mobile", icon: Smartphone, items: ["Responsive UI"] },
+  { title: "Database", icon: Database, items: ["Data Modeling"] },
+  { title: "Cloud", icon: Rocket, items: ["Vercel", "GitHub"] },
+  {
+    title: "Tools",
+    icon: TerminalSquare,
+    items: ["Visual Studio Code", "Figma", "Canva", "Arduio IDE"],
+  },
+];
+
+const toolByName = new Map(
+  listTools.map((tool) => [tool.nama.toLowerCase(), tool]),
+);
+
+const getTool = (name) => toolByName.get(name.toLowerCase());
+
+const getProjectAction = (project) => {
+  if (!project.link) {
+    return { live: "#contact", github: githubUrl };
+  }
+
+  if (project.link.includes("github.com")) {
+    return { live: project.link, github: project.link };
+  }
+
+  return { live: project.link, github: githubUrl };
+};
 
 const App = () => {
   return (
-    <>
-      <div className="hero grid md:grid-cols-2 grid-cols-1 items-center pt-1.5 xl:gap-0 gap-6">
-        <div className="animate__animated animate__fadeInUp animate__delay-3s">
-          <div className="flex items-center gap-3 mb-6 bg-zinc-800 w-fit p-4 rounded-2xl">
-            <img
-              src={DataImage.HeroImage}
-              alt="Hero Image"
-              className="w-10 rounded-md"
-              loading="lazy"
-            />
-            <p>"I Want to become Frontend Developer"</p>
-          </div>
-          <h1 className="text-5xl/tight font-bold mb-6">
-            Hi, I'm Edwin Kurniawan
-          </h1>
-          <p className="text-base/loose mb-6 opacity-50">
-            I am a Frontend Developer passionate about building responsive and
-            user-friendly websites. I gained my experience through projects
-            during my college years and continue improving my skills in modern
-            web technologies
-          </p>
-          <div className="flex items-center sm:gap-4 gap-2">
-            <a
-              href="#project"
-              className="bg-violet-700 p-4 rounded-2xl hover:bg-violet-600"
-            >
-              View Project <i className="ri-arrow-down-line ri-lg"></i>
-            </a>
-          </div>
-        </div>
-        <img
-          src={DataImage.HeroImage}
-          alt="Hero Image"
-          className="w-125 md:ml-auto animate__animated animate__fadeInUp animate__delay-4s"
-          loading="lazy"
-        />
+    <main className="site-shell">
+      <Hero />
+      <About />
+      <Skills />
+      <Achievements />
+      <Projects />
+      <Contact />
+    </main>
+  );
+};
+
+const Hero = () => (
+  <section className="hero-section section-pad" id="home" aria-label="Hero">
+    <div className="hero-orbit hero-orbit-one" />
+    <div className="hero-orbit hero-orbit-two" />
+    <Motion.div
+      className="hero-grid"
+      variants={stagger}
+      initial="hidden"
+      animate="visible"
+    >
+      <div className="hero-copy">
+        <Motion.div className="status-pill" variants={reveal}>
+          <span />
+          Available for frontend opportunities
+        </Motion.div>
+        <Motion.h1 variants={reveal}>
+          Edwin Kurniawan
+          <span>Frontend Developer crafting polished web experiences.</span>
+        </Motion.h1>
+        <Motion.p className="hero-subtitle" variants={reveal}>
+          I build responsive, user-friendly interfaces with React, Tailwind, and
+          modern web fundamentals. My work blends clean engineering, product
+          thinking, and a strong eye for detail.
+        </Motion.p>
+        <Motion.div className="hero-typing" variants={reveal}>
+          <Code2 size={18} />
+          <span className="typing-prefix">Currently exploring:</span>
+          <span
+            className="typing-words"
+            aria-label="web development, frontend web, and IOT"
+          >
+            <b>web development</b>
+            <b>frontend web</b>
+            <b>IOT</b>
+          </span>
+        </Motion.div>
+        <Motion.div className="hero-actions" variants={reveal}>
+          <MagneticButton href="#project">
+            View Projects <ArrowUpRight size={18} />
+          </MagneticButton>
+          <MagneticButton href={`mailto:${email}`} variant="secondary">
+            Let&apos;s Talk <Mail size={18} />
+          </MagneticButton>
+        </Motion.div>
+        <Motion.div className="social-row" variants={reveal}>
+          <a
+            href={githubUrl}
+            aria-label="Open Edwin GitHub"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Github size={19} />
+          </a>
+          <a
+            href={linkedinUrl}
+            aria-label="Open Edwin LinkedIn"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <i className="ri-linkedin-fill" />
+          </a>
+          <a
+            href={instagramUrl}
+            aria-label="Open Edwin Instagram"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <i className="ri-instagram-line" />
+          </a>
+          <a href={`mailto:${email}`} aria-label="Email Edwin">
+            <Mail size={19} />
+          </a>
+        </Motion.div>
       </div>
 
-      {/* About */}
-      <div className="about mt-32 py-10" id="about">
-        <div>
-          <h1
-            className="text-center text-4xl/snug font-bold mb-4"
-            data-aos="fade-up"
-            data-aos-duration="1000"
-            data-aos-once="true"
-          >
-            Education
-          </h1>
-          <p
-            className="text-center text-base/loose opacity-50"
-            data-aos="fade-up"
-            data-aos-duration="1000"
-            data-aos-delay="300"
-            data-aos-once="true"
-          >
-            Here is a list of the schools I attended.
-          </p>
-          <div className="tools-box mt-14 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-            {listEducate.map((edu) => (
-              <div
-                className="flex items-center gap-2 p-3 border border-zinc-600 rounded-md hover:bg-zinc-800 group"
-                key={edu.id}
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                data-aos-delay={edu.dad}
-                data-aos-once="true"
-              >
-                <img
-                  src={edu.gambar}
-                  alt="Tools Image"
-                  className="w-14 bg-zinc-800 p-1 group-hover:bg-zinc-900"
-                  loading="lazy"
-                />
-                <div>
-                  <h4 className="font-bold">{edu.nama}</h4>
-                  <p className="opacity-50">{edu.ket}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+      <Motion.div className="hero-visual" variants={reveal}>
+        <Motion.div
+          className="profile-frame"
+          animate={{ y: [0, -14, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <img
+            src={DataImage.HeroImage}
+            alt="Edwin Kurniawan profile"
+            loading="eager"
+          />
+          <div className="profile-glow" />
+        </Motion.div>
+        <Motion.div
+          className="floating-card floating-card-top"
+          animate={{ y: [0, 12, 0], rotate: [-1, 1, -1] }}
+          transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Sparkles size={18} />
+          UI polish, motion, performance
+        </Motion.div>
+        <Motion.div
+          className="floating-card floating-card-bottom"
+          animate={{ y: [0, -10, 0], rotate: [1, -1, 1] }}
+          transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Rocket size={18} />
+          React + Tailwind + Laravel
+        </Motion.div>
+      </Motion.div>
+    </Motion.div>
+
+    <Motion.div
+      className="hero-stats glass-panel"
+      variants={stagger}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+    >
+      {[
+        ["5+", "Featured projects"],
+        ["12+", "Tools mastered"],
+        ["4", "Achievements"],
+        ["2026", "Frontend focus"],
+      ].map(([value, label]) => (
+        <Motion.div key={label} variants={reveal}>
+          <strong>{value}</strong>
+          <span>{label}</span>
+        </Motion.div>
+      ))}
+    </Motion.div>
+  </section>
+);
+
+const About = () => (
+  <section className="section-pad" id="about">
+    <SectionHeader
+      eyebrow="About"
+      title="A developer shaped by projects, study, and product curiosity."
+      description="Education, hands-on practice, and community experience help me design interfaces that feel clear, responsive, and reliable."
+    />
+    <div className="about-layout">
+      <Motion.article
+        className="about-card glass-panel"
+        variants={reveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+      >
+        <div className="card-icon">
+          <GraduationCap size={22} />
         </div>
-
-        <div className="tools mt-32">
-          <h1
-            className="text-4xl/snug font-bold mb-4"
-            data-aos="fade-up"
-            data-aos-duration="1000"
-            data-aos-once="true"
-          >
-            Tools used
-          </h1>
-          <p
-            className="xl:w-2/5 lg:w-2/4 md:w-2/3 sm:w-3/4 w-full text-base/loose opacity-50"
-            data-aos="fade-up"
-            data-aos-duration="1000"
-            data-aos-delay="300"
-            data-aos-once="true"
-          >
-            The following are the tools that I usually use to create websites.
-          </p>
-          <div className="tools-box mt-14 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
-            {listTools.map((tool) => (
-              <div
-                className="flex items-center gap-2 p-3 border border-zinc-600 rounded-md hover:bg-zinc-800 group"
-                key={tool.id}
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                data-aos-delay={tool.dad}
-                data-aos-once="true"
-              >
-                <img
-                  src={tool.gambar}
-                  alt="Tools Image"
-                  className="w-14 bg-zinc-800 p-1 group-hover:bg-zinc-900"
-                  loading="lazy"
-                />
-                <div>
-                  <h4 className="font-bold">{tool.nama}</h4>
-                  <p className="opacity-50">{tool.ket}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      {/* About */}
-
-      {/* Achievement */}
-      <div className="project mt-32 py-10" id="achievement">
-        <h1
-          className="text-center text-4xl font-bold mb-2"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-once="true"
-        >
-          Achievement
-        </h1>
-        <p
-          className="text-base/loose text-center opacity-50"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-delay="300"
-          data-aos-once="true"
-        >
-          Here are the experiences and awards I received
-        </p>
-        <div className="mt-14">
-          <div className="grid md:grid-cols-2 grid-cols-1 gap-7">
-            <div className="">
-              <h4
-                className="text-center text-2xl font-bold -mb-9"
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                data-aos-delay="500"
-                data-aos-once="true"
-              >
-                Experience
-              </h4>
-              <div className="tools-box mt-14 grid grid-cols-1">
-                {listExperience.map((ex) => (
-                  <div
-                    className="flex items-center gap-2 p-3 border border-zinc-600 rounded-md hover:bg-zinc-800 group mt-5"
-                    key={ex.id}
-                    data-aos="fade-up"
-                    data-aos-duration="1000"
-                    data-aos-delay={ex.dad}
-                    data-aos-once="true"
-                  >
-                    <img
-                      src={ex.gambar}
-                      alt="Tools Image"
-                      className="w-20 h-20 bg-zinc-800 p-1 group-hover:bg-zinc-900"
-                      loading="lazy"
-                    />
-                    <div>
-                      <h4 className="font-bold">{ex.nama}</h4>
-                      <p className="opacity-50">{ex.ket}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="">
-              <h4
-                className="text-center text-2xl font-bold -mb-9"
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                data-aos-delay="500"
-                data-aos-once="true"
-              >
-                Achievement
-              </h4>
-              <div className="tools-box mt-14 grid grid-cols-1">
-                {listAchievement.map((achiv) => (
-                  <div
-                    className="flex items-center gap-2 p-3 border border-zinc-600 rounded-md hover:bg-zinc-800 group mt-5"
-                    key={achiv.id}
-                    data-aos="fade-up"
-                    data-aos-duration="1000"
-                    data-aos-delay={achiv.dad}
-                    data-aos-once="true"
-                  >
-                    <img
-                      src={achiv.gambar}
-                      alt="Tools Image"
-                      className="w-20 h-20 bg-zinc-800 p-1 group-hover:bg-zinc-900"
-                      loading="lazy"
-                    />
-                    <div>
-                      <h4 className="font-bold">{achiv.nama}</h4>
-                      <p className="opacity-50">{achiv.ket}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Achievement */}
-
-      {/* Project */}
-      <div className="project mt-32 py-10" id="project">
-        <h1
-          className="text-center text-4xl font-bold mb-2"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-once="true"
-        >
-          Project
-        </h1>
-        <p
-          className="text-base/loose text-center opacity-50"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-delay="300"
-          data-aos-once="true"
-        >
-          Here are the project contributions that I worked on
-        </p>
-        <div className="project-box mt-14 grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
-          {listProyek.map((pro) => (
-            <div
-              className="p-4 bg-zinc-800 rounded-md"
-              key={pro.id}
-              data-aos="fade-up"
-              data-aos-duration="1000"
-              data-aos-delay={pro.dad}
-              data-aos-once="true"
-            >
-              <img src={pro.gambar} alt="Project Image" loading="lazy" />
+        <h3>Education Timeline</h3>
+        <div className="timeline-list">
+          {listEducate.map((edu) => (
+            <div className="timeline-item" key={edu.id}>
+              <img src={edu.gambar} alt={`${edu.nama} logo`} loading="lazy" />
               <div>
-                <h1 className="text-2xl font-bold my-4">{pro.nama}</h1>
-                <p className="text-base/loose mb-4">{pro.desk}</p>
-                <div className="flex flex-wrap gap-2">
-                  {pro.tools.map((tool, index) => (
-                    <p
-                      className="py-1 px-3 border border-zinc-500 rounded-md font-semibold bg-zinc-600"
-                      key={index}
-                    >
-                      {tool}
-                    </p>
-                  ))}
-                </div>
-                <div className="mt-8 text-center">
-                  <a
-                    className="bg-violet-700 p-3 rounded-lg block border-zinc-600 hover:bg-violet-600"
-                    href={pro.link}
-                  >
-                    Details
-                  </a>
-                </div>
+                <h4>{edu.nama}</h4>
+                <p>{edu.ket}</p>
               </div>
             </div>
           ))}
         </div>
-      </div>
-      {/* Project */}
+      </Motion.article>
 
-      {/* Contact */}
-      <div className="contact mt-32 sm:p-10 p-0" id="contact">
-        <h1
-          className="text-4xl mb-2 font-bold text-center"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-once="true"
-        >
-          Contact
-        </h1>
-        <p
-          className="text-base/loose text-center mb-10 opacity-50"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-delay="300"
-          data-aos-once="true"
-        >
-          let's connect with me
-        </p>
-        <form
-          action="https://formsubmit.co/edwn.k29@gmail.com"
-          method="POST"
-          className="bg-zinc-800 p-10 sm:w-fit w-full mx-auto rounded-md"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-delay="500"
-          autoComplete="off"
-        >
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-col gap-2">
-              <label className="font-semibold">Full Name</label>
-              <input
-                type="text"
-                name="name"
-                placeholder="Input your name..."
-                className="border border-zinc-500 p-2 rounded-md"
-                required
+      <Motion.div
+        className="about-side"
+        variants={stagger}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+      >
+        <Motion.article className="metric-card" variants={reveal}>
+          <span>Current ambition</span>
+          <h3>Frontend Developer</h3>
+          <p>
+            Focused on building polished, accessible, and production-ready web
+            interfaces.
+          </p>
+        </Motion.article>
+        <Motion.article className="metric-card highlight" variants={reveal}>
+          <span>Design taste</span>
+          <h3>Clean systems with premium motion</h3>
+          <p>
+            Inspired by Linear, Vercel, Apple, Stripe, Framer, and modern bento
+            layouts.
+          </p>
+        </Motion.article>
+      </Motion.div>
+    </div>
+  </section>
+);
+
+const Skills = () => (
+  <section className="section-pad" id="skills">
+    <SectionHeader
+      eyebrow="Skills"
+      title="A modern toolkit for building practical digital products."
+      description="Grouped by category with the tools Edwin already uses across frontend, backend, design, and engineering workflows."
+    />
+    <Motion.div
+      className="skill-grid"
+      variants={stagger}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+    >
+      {techGroups.map((group, index) => {
+        const Icon = group.icon;
+        return (
+          <Motion.article
+            className="skill-card glass-panel"
+            variants={reveal}
+            key={group.title}
+          >
+            <div className="skill-card-head">
+              <span>
+                <Icon size={20} />
+              </span>
+              <div>
+                <h3>{group.title}</h3>
+                <p>{group.items.length} capabilities</p>
+              </div>
+            </div>
+            <div className="skill-stack">
+              {group.items.map((name) => {
+                const tool = getTool(name);
+                return (
+                  <div className="skill-chip" key={name}>
+                    {tool?.gambar ? (
+                      <img src={tool.gambar} alt="" loading="lazy" />
+                    ) : (
+                      <Code2 size={18} />
+                    )}
+                    <span>{name}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="progress-track" aria-hidden="true">
+              <Motion.span
+                initial={{ width: 0 }}
+                whileInView={{ width: `${72 + index * 4}%` }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.2 }}
               />
             </div>
-            <div className="flex flex-col gap-2">
-              <label className="font-semibold">Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Input your email..."
-                className="border border-zinc-500 p-2 rounded-md"
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="font-semibold" htmlFor="message">
-                message
-              </label>
-              <textarea
-                name="message"
-                id="message"
-                cols="45"
-                rows="7"
-                placeholder="message..."
-                className="border border-zinc-500 p-2 rounded-md"
-                required
-              />
-            </div>
-            <div className="text-center">
-              <button
-                className="bg-violet-700 p-3 rounded-lg w-full cursor-pointer border-zinc-600 hover:bg-violet-600"
-                type="submit"
-              >
-                Kirim Pesan
-              </button>
+          </Motion.article>
+        );
+      })}
+    </Motion.div>
+  </section>
+);
+
+const Achievements = () => (
+  <section className="section-pad" id="achievement">
+    <SectionHeader
+      eyebrow="Experience"
+      title="Proof of growth through work, leadership, and competitions."
+      description="Experience and achievements are presented as a modern timeline so recruiters can scan impact quickly."
+    />
+    <div className="experience-grid">
+      <Timeline
+        title="Experience"
+        icon={BriefcaseBusiness}
+        items={listExperience}
+      />
+      <Timeline title="Achievement" icon={Award} items={listAchievement} />
+    </div>
+  </section>
+);
+
+const Timeline = ({ title, icon: Icon, items }) => {
+  const TimelineIcon = Icon;
+
+  return (
+    <Motion.article
+      className="timeline-panel glass-panel"
+      variants={reveal}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+    >
+      <div className="panel-title">
+        <span>
+          <TimelineIcon size={20} />
+        </span>
+        <h3>{title}</h3>
+      </div>
+      <div className="modern-timeline">
+        {items.map((item) => (
+          <div className="modern-timeline-item" key={item.id}>
+            <img src={item.gambar} alt={item.nama} loading="lazy" />
+            <div>
+              <h4>{item.nama}</h4>
+              <p>
+                <CalendarDays size={14} /> {item.ket}
+              </p>
             </div>
           </div>
-        </form>
+        ))}
       </div>
-      {/* Contact */}
-    </>
+    </Motion.article>
   );
 };
+
+const Projects = () => (
+  <section className="section-pad" id="project">
+    <SectionHeader
+      eyebrow="Projects"
+      title="Selected work in a cinematic bento showcase."
+      description="Each project keeps Edwin's original portfolio data, now elevated with previews, badges, actions, and motion."
+    />
+    <Motion.div
+      className="project-bento"
+      variants={stagger}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+    >
+      {listProyek.map((project, index) => {
+        const actions = getProjectAction(project);
+        return (
+          <Motion.article
+            className={`project-card glass-panel ${index === 0 || index === 1 || index === 2 ? "project-card-wide" : ""}`}
+            key={project.id}
+            variants={reveal}
+            whileHover={{ y: -8, rotateX: 1, rotateY: -1 }}
+          >
+            <a
+              href={actions.live}
+              className="project-image"
+              target={actions.live.startsWith("http") ? "_blank" : undefined}
+              rel="noreferrer"
+            >
+              <img
+                src={project.gambar}
+                alt={`${project.nama} preview`}
+                loading="lazy"
+              />
+              <span>
+                <ExternalLink size={16} /> Preview
+              </span>
+            </a>
+            <div className="project-content">
+              <h3>{project.nama}</h3>
+              <p>{project.desk}</p>
+              <div className="badge-row">
+                {project.tools.map((tool) => (
+                  <span key={tool}>{tool}</span>
+                ))}
+              </div>
+              <div className="project-actions">
+                <MagneticButton
+                  href={actions.github}
+                  variant="ghost"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Github size={17} /> GitHub
+                </MagneticButton>
+                <MagneticButton
+                  href={actions.live}
+                  variant="secondary"
+                  target={
+                    actions.live.startsWith("http") ? "_blank" : undefined
+                  }
+                  rel="noreferrer"
+                >
+                  <ExternalLink size={17} /> Live Demo
+                </MagneticButton>
+              </div>
+            </div>
+          </Motion.article>
+        );
+      })}
+    </Motion.div>
+  </section>
+);
+
+const Contact = () => (
+  <section className="section-pad contact-section" id="contact">
+    <SectionHeader
+      eyebrow="Contact"
+      title="Let's build an interface that feels sharp from the first click."
+      description="Open for collaborations, internships, frontend roles, and practical product work."
+    />
+    <Motion.div
+      className="contact-grid"
+      variants={stagger}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+    >
+      <Motion.article className="contact-card glass-panel" variants={reveal}>
+        <h3>Start a conversation</h3>
+        <p>
+          Tell me about your idea, product, or team need. I will respond through
+          email as soon as possible.
+        </p>
+        <div className="contact-links">
+          <a href={`mailto:${email}`}>
+            <Mail size={18} /> {email}
+          </a>
+          <a href={whatsappUrl} target="_blank" rel="noreferrer">
+            <MessageCircle size={18} /> WhatsApp
+          </a>
+          <a href={linkedinUrl} target="_blank" rel="noreferrer">
+            <i className="ri-linkedin-fill" /> LinkedIn
+          </a>
+          <a href={githubUrl} target="_blank" rel="noreferrer">
+            <Github size={18} /> GitHub
+          </a>
+          <span>
+            <MapPin size={18} /> Jember, Indonesia
+          </span>
+        </div>
+      </Motion.article>
+
+      <Motion.form
+        action="https://formsubmit.co/edwn.k29@gmail.com"
+        method="POST"
+        className="contact-form glass-panel"
+        variants={reveal}
+        autoComplete="off"
+      >
+        <label>
+          Full Name
+          <input type="text" name="name" placeholder="Your name" required />
+        </label>
+        <label>
+          Email
+          <input
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            required
+          />
+        </label>
+        <label>
+          Message
+          <textarea
+            name="message"
+            rows="6"
+            placeholder="Tell me what you want to build..."
+            required
+          />
+        </label>
+        <Motion.button
+          type="submit"
+          className="btn btn-primary"
+          whileHover={{ y: -3 }}
+          whileTap={{ scale: 0.97 }}
+        >
+          Send Message <ArrowUpRight size={18} />
+        </Motion.button>
+      </Motion.form>
+    </Motion.div>
+  </section>
+);
 
 export default App;
